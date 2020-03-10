@@ -1,0 +1,5 @@
+zone "REGISTRY_DOMAIN_NAME" {
+        type master;
+        file "/etc/bind/db.ewp";
+};
+
