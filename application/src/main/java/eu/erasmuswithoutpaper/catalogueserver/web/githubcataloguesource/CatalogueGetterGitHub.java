@@ -77,7 +77,8 @@ public class CatalogueGetterGitHub implements CatalogueGetter<CatalogueMetadataG
         String retryAfterMessage = getRetryAfterMessage(retryAfterSeconds);
 
         logger.error(
-            "FORBIDDEN 403 status code received. This means that GitHub has cut us out. {}.",
+            "FORBIDDEN 403 status code received.\n{}\nThis might mean that GitHub has cut us out. {}.",
+            EntityUtils.toString(response.getEntity()),
             retryAfterMessage
         );
 
