@@ -77,7 +77,8 @@ public class CatalogueGetterGitHub implements CatalogueGetter<CatalogueMetadataG
         String retryAfterMessage = getRetryAfterMessage(retryAfterSeconds);
 
         logger.error(
-            "FORBIDDEN 403 status code received.\n{}\nThis might mean that GitHub has cut us out. {}.",
+            "FORBIDDEN 403 status code received.\n{}\n" +
+                    "This might mean that GitHub has cut us out. {}.",
             EntityUtils.toString(response.getEntity()),
             retryAfterMessage
         );
@@ -104,14 +105,12 @@ public class CatalogueGetterGitHub implements CatalogueGetter<CatalogueMetadataG
     return String.format("Cannot create an URL for fetching catalogue %s. "
             + "This is either configuration problem or programming error. "
             + "Following parts were used to create the URL:%n"
-            + "GitHub API URL: %s%n"
             + "GitHub user name: %s%n"
             + "GitHub repository name: %s%n"
             + "GitHub file path: %s%n"
             + "Requested endpoint: %s%n"
             + "Query params: %s%n",
         name,
-        this.gitHubData.getGitHubApiUrl(),
         this.gitHubData.getGitHubUserName(),
         this.gitHubData.getGitHubRepositoryName(),
         this.gitHubData.getGitHubFilePath(),
@@ -121,10 +120,10 @@ public class CatalogueGetterGitHub implements CatalogueGetter<CatalogueMetadataG
 
   private String getCatalogueFileUrl() {
     String path = String
-        .format("/repos/%s/%s/contents/%s", this.gitHubData.getGitHubUserName(),
+        .format("/%s/%s/master/%s", this.gitHubData.getGitHubUserName(),
             this.gitHubData.getGitHubRepositoryName(), this.gitHubData.getGitHubFilePath());
     try {
-      URI uri = new URI("https", this.gitHubData.getGitHubApiUrl(), path, null, null);
+      URI uri = new URI("https", this.gitHubData.getGitHubRawUrl(), path, null, null);
       return uri.toASCIIString();
     } catch (URISyntaxException e) {
       String error = createUriErrorMessage("contents", path, null);
@@ -144,8 +143,6 @@ public class CatalogueGetterGitHub implements CatalogueGetter<CatalogueMetadataG
   private HttpGet getCatalogueFileRequest(String etag) {
     HttpGet request = createGetRequest(this.getCatalogueFileUrl());
 
-    // Request for raw data instead of json.
-    request.addHeader("Accept", "application/vnd.github.v3.raw");
     if (etag != null) {
       request.addHeader("If-None-Match", etag);
     }

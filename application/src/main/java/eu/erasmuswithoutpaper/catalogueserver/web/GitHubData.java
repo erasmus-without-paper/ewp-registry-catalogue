@@ -15,6 +15,7 @@ public class GitHubData {
   private final String gitHubRepositoryName;
   private final String gitHubFilePath;
   private final String gitHubApiUrl;
+  private final String gitHubRawUrl;
   private final String gitHubAuthHeader;
 
   /**
@@ -31,6 +32,7 @@ public class GitHubData {
     this.gitHubRepositoryName = gitHubRepositoryName;
     this.gitHubFilePath = gitHubFilePath;
     this.gitHubApiUrl = "api.github.com";
+    this.gitHubRawUrl = "raw.githubusercontent.com";
     this.gitHubAuthHeader = createUserAuthHeader(gitHubAuthUserName, gitHubAuthUserToken);
   }
 
@@ -48,6 +50,10 @@ public class GitHubData {
 
   public String getGitHubApiUrl() {
     return gitHubApiUrl;
+  }
+
+  public String getGitHubRawUrl() {
+    return gitHubRawUrl;
   }
 
   public String getGitHubAuthHeader() {
